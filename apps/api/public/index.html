@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eve Horizon Todos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;600&family=JetBrains+Mono:wght@400;600&family=Sora:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              canvas: {
+                DEFAULT: '#fafaf6',
+                subtle: '#f3f2ea',
+                muted: '#e7e5da',
+              },
+              ink: {
+                DEFAULT: '#1b1b17',
+                muted: '#6b6a60',
+                faint: '#a2a097',
+              },
+              accent: {
+                DEFAULT: '#c8a555',
+                hover: '#b48e3c',
+                subtle: '#f7f1e2',
+              },
+              success: '#5d8a66',
+              danger: '#c45d5d',
+            },
+            fontFamily: {
+              display: ['Fraunces', 'serif'],
+              body: ['Sora', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            boxShadow: {
+              soft: '0 18px 40px -24px rgba(0,0,0,0.35)',
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body class="min-h-screen bg-canvas font-body text-ink">
+    <div id="app"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

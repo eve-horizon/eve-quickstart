@@ -1,0 +1,143 @@
+# Eve Horizon Manifest (v2)
+# This file defines your application's deployment configuration
+# Learn more: https://github.com/Incept5/eve-horizon
+
+schema: eve/compose/v2
+project: eve-starter
+
+# Default values applied across environments
+x-eve:
+  defaults:
+    env: sandbox
+    hints:
+      harness: mclaude
+  requires:
+    secrets:
+      - GITHUB_TOKEN
+
+registry: "eve"
+
+# Environment definitions - where your application runs
+# Deploy using: eve env deploy <env-name> --ref <git-sha-or-branch>
+# Or via pipeline: eve pipeline run <pipeline-name> --env <env-name>
+environments:
+  sandbox:
+    type: persistent
+  staging:
+    type: persistent
+
+# Service definitions - the services that make up your application
+services:
+  db:
+    x-eve:
+      role: managed_db
+      managed:
+        class: db.p1
+        engine: postgres
+        engine_version: "16"
+
+  migrate:
+    image: public.ecr.aws/w7c4v0w3/eve-horizon/migrate:latest
+    environment:
+      DATABASE_URL: ${managed.db.url}
+      MIGRATIONS_DIR: /migrations
+    x-eve:
+      role: job
+      files:
+        - source: db/migrations/
+          target: /migrations
+
+  api:
+    build:
+      context: apps/api
+    ports: [3000]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${managed.db.url}
+    healthcheck:
+      test: curl -f http://localhost:3000/health || exit 1
+    x-eve:
+      ingress:
+        public: true
+        port: 3000
+      api_spec:
+        spec_url: /openapi.json
+
+pipelines:
+  # CI/CD pipeline triggered on push to main
+  # Builds, creates release, and deploys to staging
+  # The pipeline handles git ref automatically from the triggering commit
+  ci-cd-main:
+    trigger:
+      github:
+        event: push
+        branch: main
+    steps:
+      - name: build
+        action:
+          type: build
+      - name: release
+        depends_on: [build]
+        action:
+          type: release
+      - name: deploy-staging
+        depends_on: [release]
+        action:
+          type: deploy
+          env_name: staging
+      - name: migrate
+        depends_on: [deploy-staging]
+        action:
+          type: run
+          service: migrate
+
+  # Remediation pipeline - triggers on job failures
+  remediation:
+    trigger:
+      system:
+        event: job.failed
+    steps:
+      - name: analyze
+        agent:
+          prompt: "Analyze the failure and propose a fix. Check logs, identify root cause, and suggest code changes."
+      - name: create-pr
+        depends_on: [analyze]
+        action:
+          type: create-pr
+          head: remediation/${job_id}
+          base: main
+          title: "fix: automated remediation for job failure"
+          dry_run: false
+
+  # Deploy sandbox environment pipeline
+  # For direct deployment use: eve env deploy sandbox --ref <git-sha-or-branch>
+  deploy-sandbox:
+    steps:
+      - name: build
+        action:
+          type: build
+      - name: release
+        depends_on: [build]
+        action:
+          type: release
+      - name: deploy
+        depends_on: [release]
+        action:
+          type: deploy
+          env_name: sandbox
+      - name: migrate
+        depends_on: [deploy]
+        action:
+          type: run
+          service: migrate
+
+# Workflows - agent-based operations that require analysis
+workflows:
+  log-audit:
+    trigger:
+      cron: "0 * * * *"  # Hourly
+    description: "Audit application logs for errors and trigger remediation if needed"
+    steps:
+      - name: audit
+        agent:
+          prompt: "Check the application logs for errors in the last hour. If critical errors are found, create a remediation plan."

@@ -1,0 +1,10 @@
+.agents/skills/
+.claude/skills/
+.code/
+node_modules/
+.env
+.eve-horizon.yaml
+*.local
+.DS_Store
+secrets.env
+!secrets.env.example
