@@ -3,7 +3,7 @@
 # Learn more: https://github.com/Incept5/eve-horizon
 
 schema: eve/compose/v2
-project: eve-starter
+project: evqs
 
 # Default values applied across environments
 x-eve:
