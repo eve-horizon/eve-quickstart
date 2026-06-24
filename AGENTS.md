@@ -26,7 +26,7 @@ Default to **staging** for usage guidance and deployments. Use local/docker only
 Set the API URL for all CLI commands:
 
 ```bash
-export EVE_API_URL=https://api.eh1.incept5.dev
+export EVE_API_URL=https://api.eve.example.com
 ```
 
 ## Project Overview

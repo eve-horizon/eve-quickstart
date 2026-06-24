@@ -1,6 +1,6 @@
 active_profile: staging
 profiles:
   staging:
-    api_url: https://api.eh1.incept5.dev
+    api_url: https://api.eve.example.com
     org_id: org_AlexDev
-    project_id: proj_01kj5b4cxhendrpcxsj0bfkhsq
+    project_id: proj_example
