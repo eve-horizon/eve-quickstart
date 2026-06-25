@@ -64,7 +64,7 @@ The AI will:
 If you prefer to clone this repo directly instead of using `eve init`:
 
 ```bash
-git clone https://github.com/Incept5/eve-horizon-starter my-project
+git clone https://github.com/eve-horizon/eve-horizon-starter my-project
 cd my-project
 
 # Remove template history and start fresh
@@ -114,7 +114,7 @@ Local development is intended to run via Docker Compose, and then be transposed 
 
 ## Database
 
-The starter uses Postgres for persistent storage. `docker compose up --build` starts Postgres, runs migrations via [eve-migrate](https://github.com/Incept5/eve-migrate), then starts the API.
+The starter uses Postgres for persistent storage. `docker compose up --build` starts Postgres, runs migrations via [eve-migrate](https://github.com/eve-horizon/eve-horizon/tree/main/packages/migrate), then starts the API.
 
 Migrations live in `db/migrations/` as timestamped SQL files.
 
@@ -361,8 +361,8 @@ eve admin invite --email your@email.com --github yourusername
 
 ## Documentation
 
-- [Eve Horizon Docs](https://github.com/Incept5/eve-horizon/tree/main/docs)
-- [Eve Skills](https://github.com/Incept5/eve-skillpacks)
+- [Eve Horizon Docs](https://github.com/eve-horizon/eve-horizon/tree/main/docs)
+- [Eve Skills](https://github.com/eve-horizon/eve-skillpacks)
 
 ## License
 

@@ -1,4 +1,4 @@
 # Eve Starter Skills
 # Install eve-se skills for building Eve-compatible projects
 # Skills are installed automatically by `eve init` or `eve skills install`.
-https://github.com/incept5/eve-skillpacks
+https://github.com/eve-horizon/eve-skillpacks
